@@ -1,16 +1,41 @@
-const express = require('express');
+import express from "express";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+
+import movieRoute from './routes/movies.js'
+
+dotenv.config();
 const app = express();
+const port = process.env.PORT || 8000;
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // allow all domains
-    res.setHeader('Access-Control-Allow-Methods', 'GET, PUT');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
-    next();
-  });
+// database connection
+const connect = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-app.get("/api" , (req,res)=>{
-    res.json({"users": ["userOne","userTwo","userThree"]});
-})
+    console.log("MongoDB database connected");
+  } catch (error) {
+    console.log("MongoDB database connection failed");
+  }
+};
 
-app.listen(5000, ()=> console.log('Server strated on port 5000'));
+// for testing
+app.get("/", (req, res) => {
+  res.send("api is working");
+});
+
+// middleware
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
+app.use('/movies', movieRoute);
+
+app.listen(port, () => {
+  connect();
+  console.log("server listening on port: ", port);
+});
