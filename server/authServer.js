@@ -1,13 +1,38 @@
 import express from 'express'
 import userRoute from './routes/users.js'
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
+dotenv.config();
 const app = express();
+const port = process.env.AUTH_SERVER_PORT || 9000;
+
+const connect = async () => {
+    try {
+      await mongoose.connect(process.env.MONGO_URI_SAM, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+  
+      console.log("MongoDB database connected");
+    } catch (error) {
+      console.log("MongoDB database connection failed");
+      
+      
+    }
+  };
 
 app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
 
 app.use( '/users' , userRoute);
 
 
-app.listen(5100 , () => {
-    console.log('Auth Server listning on port 5100');
-})
+app.listen(port, () => {
+    connect();
+    console.log("Auth Server listening on port: ", port);
+  });
+  
