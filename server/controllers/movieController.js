@@ -16,7 +16,7 @@ export const createMovie = async (req, res) => {
       });
   } catch (error) {
     res
-      .status(200)
+      .status(500)
       .json({
         success: false,
         message: "Failed to create. Try again.",
