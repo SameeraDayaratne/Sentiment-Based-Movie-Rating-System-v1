@@ -1,5 +1,6 @@
 import Movie from "../models/Movie.js";
 
+
 // create new movie
 export const createMovie = async (req, res) => {
   const newMovie = new Movie(req.body);
@@ -23,3 +24,11 @@ export const createMovie = async (req, res) => {
       });
   }
 };
+
+export const getMovies = (req,res) => {
+
+  console.log(req.headers['authorization']);
+  res.json({
+    message : "These are the movies"
+  });
+}
