@@ -3,8 +3,7 @@ import createHttpError from "http-errors";
 import client from "./init_redis.js";
 
 function signAccessToken(userId){
-
-    
+   
     const payload = {}
     
     const options = {
@@ -38,10 +37,6 @@ async function signRefreshToken(userId){
         console.log(error.message);
         throw createHttpError.InternalServerError();
     }
-
-    
-
-    
     
 }
 
@@ -74,7 +69,6 @@ function verifyAccessToken(req , res, next){
 
 async function verifyRefreshToken(refreshToken){
 
-
     try {
 
         const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
@@ -90,9 +84,7 @@ async function verifyRefreshToken(refreshToken){
             }
             
             throw createHttpError.Unauthorized();
-            
-            
-            
+                    
         } catch (error) {
             console.log('error is ' + error);
             if(error.message === 'Unauthorized'){
@@ -100,8 +92,7 @@ async function verifyRefreshToken(refreshToken){
             }
             else{
                 throw createHttpError.InternalServerError();
-            }
-            
+            }      
         }
         
     } catch (error) {

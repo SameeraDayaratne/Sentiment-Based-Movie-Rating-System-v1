@@ -45,8 +45,7 @@ export const registerUser = async (req, res , next) => {
             console.log(error.message);
             throw createHttpError.InternalServerError();
         }
-
-        
+       
       } catch (error) {
 
         if(error.isJoi === true) 
@@ -122,7 +121,6 @@ export const loginUser = async (req, res , next) => {
         const newAccessToken = signAccessToken(userId);
         const newRefreshToken =await signRefreshToken(userId);
 
-
         res.json({
             accessToken : newAccessToken,
             refreshToken : newRefreshToken
@@ -131,17 +129,11 @@ export const loginUser = async (req, res , next) => {
        } catch (error) {
         next(error);
        }
-        
-
-        
-        
-        
-        
+  
     } catch (error) {
         next(error)
     }
 
-    
   }
 
   export const logoutUser = async (req,res,next) => {
@@ -161,8 +153,7 @@ export const loginUser = async (req, res , next) => {
             console.log(error.message);
             throw createHttpError.InternalServerError();
         }
-        
-        
+              
     } catch (error) {
         next(error)
     }
