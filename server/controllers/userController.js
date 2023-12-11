@@ -4,7 +4,7 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import { authSchema } from '../util/validation_schema.js'
 import createHttpError from "http-errors";
-import {signAccessToken , signRefreshToken} from '../util/jwt_helper.js'
+import {signAccessToken , signRefreshToken , verifyRefreshToken} from '../util/jwt_helper.js'
 
 export const registerUser = async (req, res , next) => {
 
@@ -102,4 +102,31 @@ export const loginUser = async (req, res , next) => {
         
         next(error);
     }
+  }
+
+  export const refreshToken = async (req,res,next) => {
+
+    try {
+
+        const { refreshToken }= req.body;
+
+        if(!refreshToken){
+            throw createHttpError.BadRequest()
+        }
+        
+        const userId = verifyRefreshToken(refreshToken);
+            
+        const newAccessToken = signAccessToken(userId);
+        const newRefreshToken = signRefreshToken(userId);
+
+        res.json({
+            accessToken : newAccessToken,
+            refreshToken : newRefreshToken
+        });
+        
+    } catch (error) {
+        next(error)
+    }
+
+    
   }
