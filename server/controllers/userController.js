@@ -31,7 +31,7 @@ export const registerUser = async (req, res , next) => {
         try {
 
             const accessToken = signAccessToken(savedUser.id);
-            const refreshToken = signRefreshToken(savedUser.id);
+            const refreshToken = await signRefreshToken(savedUser.id);
     
             res.status(201).json({
                 success : true,
@@ -76,13 +76,14 @@ export const loginUser = async (req, res , next) => {
            
             try {
                 const accessToken = signAccessToken(user.id);
-                const refreshToken = signRefreshToken(user.id);
+                const refreshToken = await signRefreshToken(user.id);
+
 
                 res.json({
                     success : true,
-                    message: 'Successfully Logged in',
-                    accessToken,
-                    refreshToken
+                    message: 'Successfully Logged ins',
+                    accessToken : accessToken,
+                    refreshToken :refreshToken
                 });
                 
             } catch (error) {
@@ -114,15 +115,28 @@ export const loginUser = async (req, res , next) => {
             throw createHttpError.BadRequest()
         }
         
-        const userId = verifyRefreshToken(refreshToken);
-            
+       try {
+        const userId = await verifyRefreshToken(refreshToken);
+
+        console.log('before acc');
         const newAccessToken = signAccessToken(userId);
-        const newRefreshToken = signRefreshToken(userId);
+        console.log('after acc');
+        const newRefreshToken =await signRefreshToken(userId);
+        console.log('after refrs');
 
         res.json({
             accessToken : newAccessToken,
             refreshToken : newRefreshToken
         });
+
+       } catch (error) {
+        next(error);
+       }
+        
+
+        
+        
+        
         
     } catch (error) {
         next(error)

@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import createHttpError from 'http-errors';
+import './util/init_redis.js'
 
 
 dotenv.config();
