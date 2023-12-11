@@ -89,18 +89,30 @@ async function verifyRefreshToken(refreshToken){
                 return userId;
             }
             
-                throw createHttpError.Unauthorized();
+            throw createHttpError.Unauthorized();
             
             
             
         } catch (error) {
-            console.log('error is ' + error.message);
-            throw createHttpError.InternalServerError();
+            console.log('error is ' + error);
+            if(error.message === 'Unauthorized'){
+                throw createHttpError.Unauthorized();
+            }
+            else{
+                throw createHttpError.InternalServerError();
+            }
+            
         }
         
     } catch (error) {
-        throw createHttpError.InternalServerError();
+        if(error.message === 'Unauthorized'){
+            throw createHttpError.Unauthorized();
+        }
+        else{
+            throw createHttpError.InternalServerError();
+        }
     }
+
 
 
     // jwt.verify(refreshToken , process.env.REFRESH_TOKEN_SECRET ,async (err, payload) => {

@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { authSchema } from '../util/validation_schema.js'
 import createHttpError from "http-errors";
 import {signAccessToken , signRefreshToken , verifyRefreshToken} from '../util/jwt_helper.js'
+import client from "../util/init_redis.js";
 
 export const registerUser = async (req, res , next) => {
 
@@ -118,11 +119,9 @@ export const loginUser = async (req, res , next) => {
        try {
         const userId = await verifyRefreshToken(refreshToken);
 
-        console.log('before acc');
         const newAccessToken = signAccessToken(userId);
-        console.log('after acc');
         const newRefreshToken =await signRefreshToken(userId);
-        console.log('after refrs');
+
 
         res.json({
             accessToken : newAccessToken,
@@ -143,4 +142,29 @@ export const loginUser = async (req, res , next) => {
     }
 
     
+  }
+
+  export const logoutUser = async (req,res,next) => {
+
+    try {
+
+        const { refreshToken} = req.body;
+        if(!refreshToken) throw createHttpError.BadRequest();
+
+        const userId = await verifyRefreshToken(refreshToken);
+
+        try {
+           const val = await client.DEL(userId);
+           console.log(val);
+           res.sendStatus(204);
+        } catch (error) {
+            console.log(error.message);
+            throw createHttpError.InternalServerError();
+        }
+        
+        
+    } catch (error) {
+        next(error)
+    }
+
   }
