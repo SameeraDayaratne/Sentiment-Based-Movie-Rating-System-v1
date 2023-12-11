@@ -8,4 +8,8 @@ router.post("/register", registerUser);
 
 router.post("/login", loginUser );
 
+router.post("/refresh-token" , );
+
+router.delete("/logout" , );
+
 export default router;

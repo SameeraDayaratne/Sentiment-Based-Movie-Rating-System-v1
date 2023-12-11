@@ -1,14 +1,28 @@
 
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
+import { authSchema } from '../util/validation_schema.js'
+import createHttpError from "http-errors";
 
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res , next) => {
 
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    try { 
+
+        // const { email , password} = req.body;
+
+        const result = await authSchema.validateAsync(req.body);
+
+        const doesExist = await User.findOne({email : result.email});
+        
+        if(doesExist){
+            throw createHttpError.Conflict(`${result.email} is already been registered`);
+        }
+
+        const hashedPassword = await bcrypt.hash(result.password, 10);
 
         const user = {
-            email : req.body.email,
+            email : result.email,
             password : hashedPassword
         }
 
@@ -21,11 +35,19 @@ export const registerUser = async (req, res) => {
             data : savedUser
         });
       } catch (error) {
-        res.status(500).json({
-            success : false,
-            message : 'User creation failed',
-            error : error
-        });
+
+        if(error.isJoi === true) 
+        {
+            error.status = 422
+        }
+        
+        next(error);
+
+        // res.json({
+        //     success : false,
+        //     message : 'User creation failed',
+        //     error : error
+        // });
       }
 
 }
@@ -44,9 +66,15 @@ export const loginUser = async (req, res) => {
         }
 
       if(await bcrypt.compare(req.body.password, user.password)) {
+
+        const username = req.body.email;
+        const authenticatedUser = {usename : username}
+        const accessToken = jwt.sign(authenticatedUser, process.env.ACCESS_TOKEN_SECRET);
+
         res.json({
             success : true,
             message: 'Successfully Logged in',
+            accessToken : accessToken
         });
       } else {
         res.json({
