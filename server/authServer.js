@@ -6,6 +6,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import createHttpError from 'http-errors';
 
+
 dotenv.config();
 const app = express();
 const port = process.env.AUTH_SERVER_PORT || 9000;
@@ -32,10 +33,12 @@ app.use(cookieParser());
 app.use( '/users' , userRoute);
 
 app.use(async (req,res,next) =>{
+
     next(createHttpError.NotFound());
 })
 
 app.use((err, req, res ,next)=>{
+
     res.status(err.status || 500);
     res.json({
         error: {

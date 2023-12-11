@@ -4,12 +4,11 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import { authSchema } from '../util/validation_schema.js'
 import createHttpError from "http-errors";
+import {signAccessToken , signRefreshToken} from '../util/jwt_helper.js'
 
 export const registerUser = async (req, res , next) => {
 
     try { 
-
-        // const { email , password} = req.body;
 
         const result = await authSchema.validateAsync(req.body);
 
@@ -28,12 +27,25 @@ export const registerUser = async (req, res , next) => {
 
         const newUser = new User(user);
         const savedUser = await newUser.save();
+
+        try {
+
+            const accessToken = signAccessToken(savedUser.id);
+            const refreshToken = signRefreshToken(savedUser.id);
     
-        res.status(201).json({
-            success : true,
-            message : 'New user created',
-            data : savedUser
+            res.status(201).json({
+                success : true,
+                message : 'New user created',
+                accessToken,
+                refreshToken
         });
+            
+        } catch (error) {
+            console.log(error.message);
+            throw createHttpError.InternalServerError();
+        }
+
+        
       } catch (error) {
 
         if(error.isJoi === true) 
@@ -43,50 +55,51 @@ export const registerUser = async (req, res , next) => {
         
         next(error);
 
-        // res.json({
-        //     success : false,
-        //     message : 'User creation failed',
-        //     error : error
-        // });
       }
 
 }
 
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res , next) => {
 
     try {
 
-        const user = await User.findOne({email : req.body.email});
+        const result = await authSchema.validateAsync(req.body);
+
+        const user = await User.findOne({email : result.email});
 
         if (user == null) {
-          return res.status(400).json({
-            success : false,
-            message: 'Could not find user',
-        });;
+          throw createHttpError.NotFound("User not registered");
         }
 
-      if(await bcrypt.compare(req.body.password, user.password)) {
+      if(await bcrypt.compare(result.password, user.password)) {
 
-        const username = req.body.email;
-        const authenticatedUser = {usename : username}
-        const accessToken = jwt.sign(authenticatedUser, process.env.ACCESS_TOKEN_SECRET);
+           
+            try {
+                const accessToken = signAccessToken(user.id);
+                const refreshToken = signRefreshToken(user.id);
 
-        res.json({
-            success : true,
-            message: 'Successfully Logged in',
-            accessToken : accessToken
-        });
+                res.json({
+                    success : true,
+                    message: 'Successfully Logged in',
+                    accessToken,
+                    refreshToken
+                });
+                
+            } catch (error) {
+                console.log(error.message);
+                throw createHttpError.InternalServerError();
+            }
+        
       } else {
-        res.json({
-            success : false,
-            message: 'Incorrect Password',
-        });
+        throw createHttpError.Unauthorized("Username or password not valid");
       }
     } catch (error) {
-      res.status(500).json({
-        success : false,
-        message: 'Server Error',
-        error : error
-    });
+        
+        if(error.isJoi === true) 
+        {
+            return next(createHttpError.BadRequest('Invalid Username or Password'));
+        }
+        
+        next(error);
     }
   }
