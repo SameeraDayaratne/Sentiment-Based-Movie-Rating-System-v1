@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
+import createHttpError from 'http-errors';
 import movieRoute from './routes/movies.js'
 
 dotenv.config();
@@ -21,6 +21,8 @@ const connect = async () => {
     console.log("MongoDB database connected");
   } catch (error) {
     console.log("MongoDB database connection failed");
+    
+    
   }
 };
 
@@ -34,6 +36,21 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 app.use('/movies', movieRoute);
+
+app.use(async (req,res,next) =>{
+  next(createHttpError.NotFound());
+})
+
+app.use((err, req, res ,next)=>{
+  res.status(err.status || 500);
+  res.json({
+      error: {
+          status : err.status || 500,
+          message : err.message
+      }
+  });
+}
+);
 
 app.listen(port, () => {
   connect();

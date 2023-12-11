@@ -1,5 +1,6 @@
 import Movie from "../models/Movie.js";
 
+
 // create new movie
 export const createMovie = async (req, res) => {
   const newMovie = new Movie(req.body);
@@ -16,10 +17,18 @@ export const createMovie = async (req, res) => {
       });
   } catch (error) {
     res
-      .status(200)
+      .status(500)
       .json({
         success: false,
         message: "Failed to create. Try again.",
       });
   }
 };
+
+export const getMovies = (req,res) => {
+
+  console.log(req.headers['authorization']);
+  res.json({
+    message : "These are the movies"
+  });
+}
