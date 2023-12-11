@@ -1,5 +1,6 @@
 import jwt  from "jsonwebtoken";
 import createHttpError from "http-errors";
+import client from "./init_redis.js";
 
 function signAccessToken(userId){
 
@@ -9,23 +10,39 @@ function signAccessToken(userId){
     const options = {
         expiresIn : "15s",
         issuer: "tmrs.com",
-        audience : toString(userId)
+        audience : userId
     }
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET , options);
     return accessToken
 }
 
-function signRefreshToken(userId){
+async function signRefreshToken(userId){
     
     const payload = {}
     
     const options = {
         expiresIn : "1y",
         issuer: "tmrs.com",
-        audience : toString(userId)
+        audience : userId
     }
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET , options);
-    return refreshToken
+
+    const TTL = {
+        EX: 1800000,
+    }
+
+    try {
+        await client.set(userId , refreshToken , TTL );
+        return refreshToken
+    } catch (error) {
+        console.log(error.message);
+        throw createHttpError.InternalServerError();
+    }
+
+    
+
+    
+    
 }
 
 function verifyAccessToken(req , res, next){
@@ -55,20 +72,70 @@ function verifyAccessToken(req , res, next){
 }
 
 
-function verifyRefreshToken(refreshToken){
+async function verifyRefreshToken(refreshToken){
 
-    jwt.verify(refreshToken , process.env.REFRESH_TOKEN_SECRET , (err, payload) => {
-        if(err)
-        {
-            throw createHttpError.Unauthorized('sdsd');
+
+    try {
+
+        const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const userId = decoded.aud;
+
+
+        try {
+            const latestRefToken = await client.get(userId);
+            
+            if(refreshToken === latestRefToken)
+            {
+                return userId;
+            }
+            
+                throw createHttpError.Unauthorized();
+            
+            
+            
+        } catch (error) {
+            console.log('error is ' + error.message);
+            throw createHttpError.InternalServerError();
         }
+        
+    } catch (error) {
+        throw createHttpError.InternalServerError();
+    }
 
 
-        const userId = payload.aud;
+    // jwt.verify(refreshToken , process.env.REFRESH_TOKEN_SECRET ,async (err, payload) => {
+    //     if(err)
+    //     {
+    //         throw createHttpError.Unauthorized('sdsd');
+    //     }
 
-        console.log(userId);
-        return userId;
-    })
+
+    //     console.log('payload id is ' + JSON.stringify(payload));
+    //     const userId = payload.aud;
+
+    //     try {
+    //         // console.log('user id is ' + toString(userId));
+    //         // console.log('latest token  isssss' + await client.get(userId));
+    //         // console.log('latest token  is ' + latestRefToken);
+
+    //         const latestRefToken = await client.get(userId);
+            
+    //         if(refreshToken === latestRefToken)
+    //         {
+    //             return userId;
+    //         }
+    //         else{
+    //             throw createHttpError.Unauthorized();
+    //         }
+            
+            
+    //     } catch (error) {
+    //         console.log('error is ' + error.message);
+    //         throw createHttpError.InternalServerError();
+    //     }
+        
+        
+    // })
 }
 
 export {
