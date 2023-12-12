@@ -28,6 +28,8 @@ const HeroBanner = () => {
         }
     };
 
+    console.log(data)
+
     return (
         <div className="heroBanner">
             {!loading && (
