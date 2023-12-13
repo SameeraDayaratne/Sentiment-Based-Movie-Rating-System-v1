@@ -7,7 +7,6 @@ import cookieParser from "cookie-parser";
 import createHttpError from 'http-errors';
 import './util/init_redis.js'
 
-
 dotenv.config();
 const app = express();
 const port = process.env.AUTH_SERVER_PORT || 9000;
@@ -28,7 +27,10 @@ const connect = async () => {
   };
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173'],
+  credentials: true,
+}));
 app.use(cookieParser());
 
 app.use( '/users' , userRoute);
