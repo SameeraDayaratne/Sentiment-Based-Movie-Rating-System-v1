@@ -23,16 +23,16 @@ const Header = () => {
     }, [location]);
 
     const controlNavbar = () => {
-        if (window.scrollY > 200) {
-            if (window.scrollY > lastScrollY && !mobileMenu) {
-                setShow("hide");
-            } else {
-                setShow("show");
-            }
-        } else {
-            setShow("top");
-        }
-        setLastScrollY(window.scrollY);
+        // if (window.scrollY > 200) {
+        //     if (window.scrollY > lastScrollY && !mobileMenu) {
+        //         setShow("hide");
+        //     } else {
+        //         setShow("show");
+        //     }
+        // } else {
+        //     setShow("top");
+        // }
+        // setLastScrollY(window.scrollY);
     };
 
     useEffect(() => {

@@ -7,7 +7,7 @@ function signAccessToken(userId){
     const payload = {}
     
     const options = {
-        expiresIn : "15s",
+        expiresIn : "1m",
         issuer: "tmrs.com",
         audience : userId
     }
@@ -52,12 +52,13 @@ function verifyAccessToken(req , res, next){
 
     jwt.verify(token , process.env.ACCESS_TOKEN_SECRET , (err , payload) => {
         if(err){
+            
             if(err.name === "JsonWebTokenError")
             {
                 return next(createHttpError.Unauthorized());
             }
             else{
-                return next(createHttpError.Unauthorized(err.message));
+                return next(createHttpError.Unauthorized(err.message ));
             }            
         }
 
