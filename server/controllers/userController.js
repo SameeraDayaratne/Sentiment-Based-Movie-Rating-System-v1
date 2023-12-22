@@ -21,7 +21,12 @@ export const registerUser = async (req, res , next) => {
 
         const hashedPassword = await bcrypt.hash(result.password, 10);
 
+        console.log('fname');
+        console.log(result.firstName);
+
         const user = {
+            firstName: result.firstName,
+            lastName: result.lastName,
             email : result.email,
             password : hashedPassword
         }
@@ -29,22 +34,31 @@ export const registerUser = async (req, res , next) => {
         const newUser = new User(user);
         const savedUser = await newUser.save();
 
-        try {
-
-            const accessToken = signAccessToken(savedUser.id);
-            const refreshToken = await signRefreshToken(savedUser.id);
-    
-            res.status(201).json({
+               res.status(201).json({
                 success : true,
-                message : 'New user created',
-                accessToken,
-                refreshToken
+                message : 'New user created'
+                
         });
+
+
+        // try {
+
+        //     const accessToken = signAccessToken(savedUser.id);
+        //     const refreshToken = await signRefreshToken(savedUser.id);
+    
+        //     res.status(201).json({
+        //         success : true,
+        //         message : 'New user created',
+        //         accessToken,
+        //         refreshToken
+        // });
+
+       
             
-        } catch (error) {
-            console.log(error.message);
-            throw createHttpError.InternalServerError();
-        }
+        // } catch (error) {
+        //     console.log(error.message);
+        //     throw createHttpError.InternalServerError();
+        // }
        
       } catch (error) {
 
