@@ -2,7 +2,7 @@
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
-import { authSchema } from '../util/validation_schema.js'
+import { authSchemaSignIn ,authSchemaLogIn } from '../util/validation_schema.js'
 import createHttpError from "http-errors";
 import {signAccessToken , signRefreshToken , verifyRefreshToken} from '../util/jwt_helper.js'
 import client from "../util/init_redis.js";
@@ -11,7 +11,7 @@ export const registerUser = async (req, res , next) => {
 
     try { 
 
-        const result = await authSchema.validateAsync(req.body);
+        const result = await authSchemaSignIn.validateAsync(req.body);
 
         const doesExist = await User.findOne({email : result.email});
         
@@ -77,7 +77,8 @@ export const loginUser = async (req, res , next) => {
 
     try {
 
-        const result = await authSchema.validateAsync(req.body);
+        const result = await authSchemaLogIn.validateAsync(req.body);
+
 
         const user = await User.findOne({email : result.email});
 
@@ -93,12 +94,21 @@ export const loginUser = async (req, res , next) => {
                 const refreshToken = await signRefreshToken(user.id);
 
 
-                res.json({
+
+                res.cookie('jwt' , refreshToken , {
+                    httpOnly : true,
+                    sameSite: 'none',
+                    secure : true,
+                    maxAge : 60*1000,
+                    
+                }).json({
                     success : true,
                     message: 'Successfully Logged ins',
-                    accessToken : accessToken,
-                    refreshToken :refreshToken
+                    accessToken : accessToken
+                    
                 });
+
+                
                 
             } catch (error) {
                 console.log(error.message);
