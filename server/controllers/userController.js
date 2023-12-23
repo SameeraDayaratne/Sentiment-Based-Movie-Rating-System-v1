@@ -103,7 +103,7 @@ export const loginUser = async (req, res , next) => {
                     httpOnly : true,
                     sameSite: 'none',
                     secure : true,
-                    maxAge : 5*60*1000,
+                    
                     
                 }).json({
                     success : true,
@@ -155,7 +155,7 @@ export const loginUser = async (req, res , next) => {
             httpOnly : true,
             sameSite: 'none',
             secure : true,
-            maxAge : 5*60*1000,
+            
             
         }).json({
             success : true,
@@ -178,15 +178,14 @@ export const loginUser = async (req, res , next) => {
 
     try {
 
-        const { refreshToken} = req.body;
+        const refreshToken = req.cookies.jwt;
         if(!refreshToken) throw createHttpError.BadRequest();
 
         const userId = await verifyRefreshToken(refreshToken);
 
         try {
            const val = await client.DEL(userId);
-           console.log(val);
-           res.sendStatus(204);
+           res.clearCookie('jwt').sendStatus(204);
         } catch (error) {
             console.log(error.message);
             throw createHttpError.InternalServerError();
