@@ -85,6 +85,10 @@ export const loginUser = async (req, res , next) => {
         if (user == null) {
           throw createHttpError.NotFound("User not registered");
         }
+        const { password:password , ...rest}= user._doc;
+
+       
+        
 
       if(await bcrypt.compare(result.password, user.password)) {
 
@@ -99,12 +103,13 @@ export const loginUser = async (req, res , next) => {
                     httpOnly : true,
                     sameSite: 'none',
                     secure : true,
-                    maxAge : 60*1000,
+                    maxAge : 5*60*1000,
                     
                 }).json({
                     success : true,
                     message: 'Successfully Logged ins',
-                    accessToken : accessToken
+                    accessToken : accessToken,
+                    user : rest
                     
                 });
 
@@ -132,8 +137,9 @@ export const loginUser = async (req, res , next) => {
   export const refreshToken = async (req,res,next) => {
 
     try {
-
-        const { refreshToken }= req.body;
+        // console.log('cookies');
+        // console.log(req.cookies.jwt);
+        const  refreshToken = req.cookies.jwt;
 
         if(!refreshToken){
             throw createHttpError.BadRequest()
@@ -145,9 +151,17 @@ export const loginUser = async (req, res , next) => {
         const newAccessToken = signAccessToken(userId);
         const newRefreshToken =await signRefreshToken(userId);
 
-        res.json({
-            accessToken : newAccessToken,
-            refreshToken : newRefreshToken
+        res.cookie('jwt' , newRefreshToken , {
+            httpOnly : true,
+            sameSite: 'none',
+            secure : true,
+            maxAge : 5*60*1000,
+            
+        }).json({
+            success : true,
+            message: 'Successfully Refreshed Tokens',
+            accessToken : newAccessToken,    
+            
         });
 
        } catch (error) {
