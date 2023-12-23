@@ -1,12 +1,18 @@
 import Joi from '@hapi/joi'
 
-const authSchema = Joi.object({
+const authSchemaSignIn = Joi.object({
     firstName: Joi.string().required(),
     lastName : Joi.string().required(),
     email: Joi.string().email().lowercase().required(),
     password: Joi.string().min(6).required()
 });
 
+const authSchemaLogIn = Joi.object({
+    email: Joi.string().email().lowercase().required(),
+    password: Joi.string().min(6).required()
+});
+
 export {
-    authSchema
+    authSchemaSignIn,
+    authSchemaLogIn
 }
