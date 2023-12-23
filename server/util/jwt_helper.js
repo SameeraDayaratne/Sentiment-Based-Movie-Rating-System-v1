@@ -7,7 +7,7 @@ function signAccessToken(userId){
     const payload = {}
     
     const options = {
-        expiresIn : "1m",
+        expiresIn : "10s",
         issuer: "tmrs.com",
         audience : userId
     }
@@ -20,7 +20,7 @@ async function signRefreshToken(userId){
     const payload = {}
     
     const options = {
-        expiresIn : "1y",
+        expiresIn : "1m",
         issuer: "tmrs.com",
         audience : userId
     }

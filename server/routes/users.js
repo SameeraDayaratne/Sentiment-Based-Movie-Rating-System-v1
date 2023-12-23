@@ -8,7 +8,7 @@ router.post("/register", registerUser);
 
 router.post("/login", loginUser );
 
-router.post("/refresh-token" , refreshToken);
+router.get("/refresh-token" , refreshToken);
 
 router.delete("/logout" , logoutUser);
 
