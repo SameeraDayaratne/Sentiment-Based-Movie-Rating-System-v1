@@ -75,7 +75,7 @@ async function verifyRefreshToken(refreshToken){
         const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         const userId = decoded.aud;
 
-
+        console.log(userId);
         try {
             const latestRefToken = await client.get(userId);
             
@@ -87,7 +87,7 @@ async function verifyRefreshToken(refreshToken){
             throw createHttpError.Unauthorized();
                     
         } catch (error) {
-            console.log('error is ' + error);
+            
             if(error.message === 'Unauthorized'){
                 throw createHttpError.Unauthorized();
             }
@@ -97,6 +97,7 @@ async function verifyRefreshToken(refreshToken){
         }
         
     } catch (error) {
+        
         if(error.message === 'Unauthorized'){
             throw createHttpError.Unauthorized();
         }
