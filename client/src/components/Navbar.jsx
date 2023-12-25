@@ -6,6 +6,7 @@ import { Outlet , NavLink ,useNavigate} from 'react-router-dom'
 import { useSelector ,useDispatch } from 'react-redux';
 import { logOutSuccess } from '../redux/user/userSlice.js';
 import auth from '../api/auth.js';
+import useLogout from '../hooks/useLogout.js';
 // import { cookies } from 'react-cookie'
 
 
@@ -18,35 +19,38 @@ function Navbar(props) {
 
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
+
+    const handleLogout = useLogout();
 
     function handleSignUp(){
         navigate('signup');
     }
 
-    async function handleLogOut() {
+    // async function handleLogOut() {
 
-         try {
-            const response = await auth.delete('/logout' , {withCredentials : true})
+    //      try {
+    //         const response = await auth.delete('/logout' , {withCredentials : true})
 
-            if(response.status === 204)
-            {
-                localStorage.removeItem('accessToken');
-                // cookies.remove('jwt');
-                dispatch(logOutSuccess());
-                navigate('/');
+    //         if(response.status === 204)
+    //         {
+    //             localStorage.removeItem('accessToken');
+    //             // cookies.remove('jwt');
+    //             dispatch(logOutSuccess());
+    //             navigate('/');
 
-            }
-         } catch (error) {
+    //         }
+    //      } catch (error) {
             
-            console.log(error);
-            localStorage.removeItem('accessToken');
-                // cookies.remove('jwt');
-                dispatch(logOutSuccess());
-                navigate('/');
-         }
+    //         console.log(error);
+    //         localStorage.removeItem('accessToken');
+    //             // cookies.remove('jwt');
+    //             dispatch(logOutSuccess());
+    //             navigate('/');
+    //      }
 
-    }
+    // }
+
 
     function setNavFixed(){
         if(window.scrollY > 50){
@@ -83,7 +87,7 @@ function Navbar(props) {
                 {!user.currentUser && <li className={liClass}><NavLink to='/login' className={({isActive}) => (isActive ? 'text-[#ff5100]' : 'hover:text-gray-300')} >Login</NavLink></li>}
                 
                 {/* <li className={liClass}>Login</li> */}
-                {user.currentUser ? <li className='p-4'><button onClick={handleLogOut} className='bg-[#ff5100]  rounded-md py-1 w-[80px]   hover:bg-[#c63600]'>Log Out</button></li> : <li className='p-4'><button onClick={handleSignUp} className='bg-[#ff5100]  rounded-md py-1 w-[80px]   hover:bg-[#c63600]'>Sign Up</button></li>}
+                {user.currentUser ? <li className='p-4'><button onClick={handleLogout} className='bg-[#ff5100]  rounded-md py-1 w-[80px]   hover:bg-[#c63600]'>Log Out</button></li> : <li className='p-4'><button onClick={handleSignUp} className='bg-[#ff5100]  rounded-md py-1 w-[80px]   hover:bg-[#c63600]'>Sign Up</button></li>}
                 
             </ul>
             <div onClick={handleNav} className='block md:hidden'>
