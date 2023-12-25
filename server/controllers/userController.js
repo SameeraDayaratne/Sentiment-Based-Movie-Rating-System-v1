@@ -140,7 +140,7 @@ export const loginUser = async (req, res , next) => {
         // console.log('cookies');
         // console.log(req.cookies.jwt);
         const  refreshToken = req.cookies.jwt;
-
+        
         if(!refreshToken){
             throw createHttpError.BadRequest()
         }
@@ -165,6 +165,7 @@ export const loginUser = async (req, res , next) => {
         });
 
        } catch (error) {
+        
         next(error);
        }
   

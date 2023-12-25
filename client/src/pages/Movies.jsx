@@ -4,11 +4,15 @@ import { useEffect } from 'react';
 import { getAccessToken } from '../utils/auth';
 import movies from '../api/movies.js';
 import jwtInterceptor from '../api/jwtInterceptor.js';
+import useLogout from '../hooks/useLogout.js';
+
+
 
 
 function Movies(props) {
 
-    const [data , setData] = useState('')
+    const [data , setData] = useState('');
+    const handleLogout = useLogout();
 
     useEffect(()=>{
         async function getMovies(){
@@ -28,7 +32,7 @@ function Movies(props) {
             console.log('in movies route');
             console.log(response);
             } catch (error) {
-                //logout the user due to refresh token expiration
+                handleLogout();
                 console.log(error);
             }
             
