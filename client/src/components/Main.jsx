@@ -10,18 +10,41 @@ import g from "../assets/5.jpg";
 import h from "../assets/6.jpg";
 import 'react-loading-skeleton/dist/skeleton.css'
 import MovieCardSkeleton from "./MovieCardSkeleton";
+import tmdb from "../api/tmdb";
+import MovieCardNew from "./MovieCardNew";
 
 
 function Main(props) {
 
+    const [movies , setMovies] = useState(null)
     const [isLoading , setIsLoading] = useState(true)
+    const [error , setError] = useState(null)
 
     useEffect(() => {
-        setTimeout(()=> {
-            setIsLoading(false);
-        },3000);
+        // setTimeout(()=> {
+        //     setIsLoading(false);
+        // },3000);
+
+        async function fetchMostPopularMovies(){
+            try {
+                const response = await tmdb.get('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1');
+                const movies = response.data.results
+                // console.log(movies);
+                setMovies(movies);
+                setIsLoading(false)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetchMostPopularMovies();
+
+
     } , [])
-    
+
+    console.log('movies are');
+    console.log(movies);
+
   return (
     <div className="mt-14 max-w-sm sm:max-w-xl md:max-w-3xl lg:max-w-5xl mx-auto">
         <div>
@@ -32,8 +55,12 @@ function Main(props) {
         {isLoading && <div className="grid sm:grid-cols-4  md:grid-cols-5 gap-8 items-center place-items-center justify-center my-8">
             <MovieCardSkeleton cards={15}/>
         </div> }
-        {!isLoading && <div className="grid  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-y-8 sm:gap-0 gap-8 items-center place-items-center justify-center my-8">
-            <MovieCard imgSrc={ex} />
+        {(!isLoading && movies) && <div className="grid  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-y-8 sm:gap-2 gap-8    my-8">
+           
+            {movies.map(movie => {
+                return <MovieCard key={movie.id} title={movie.title} posterPath={movie.poster_path} />
+            })}
+            {/* <MovieCard imgSrc={ex} />
         <MovieCard imgSrc={a} />
         <MovieCard imgSrc={s} />
         <MovieCard imgSrc={d} />
@@ -52,7 +79,7 @@ function Main(props) {
         <MovieCard imgSrc={h} />
         <MovieCard imgSrc={a} />
         <MovieCard imgSrc={s} />
-        <MovieCard imgSrc={d} />
+        <MovieCard imgSrc={d} /> */}
         </div>
         
 }
