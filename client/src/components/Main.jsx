@@ -1,46 +1,57 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import MovieCard from "./MovieCard";
-import ex from "../assets/ex.jpg";
-import a from "../assets/1.jpg";
-import s from "../assets/2.jpg";
-import d from "../assets/3.jpg";
-import f from "../assets/4.jpg";
-import g from "../assets/5.jpg";
-import h from "../assets/6.jpg";
 import 'react-loading-skeleton/dist/skeleton.css'
 import MovieCardSkeleton from "./MovieCardSkeleton";
 import tmdb from "../api/tmdb";
-import MovieCardNew from "./MovieCardNew";
+
 
 
 function Main(props) {
 
-    const [movies , setMovies] = useState(null)
+    const [movies , setMovies] = useState([])
     const [isLoading , setIsLoading] = useState(true)
     const [error , setError] = useState(null)
+    const [hasMore , setHasMore] = useState(false)
+    const [pageNumber ,setPageNumber] = useState(1);
+
+    const observer = useRef();
+    const lastMovieRef = useCallback(node => {
+        if(isLoading) return;
+        if(observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if(entries[0].isIntersecting && hasMore)
+            {
+                setPageNumber(prev => prev + 1);
+            }
+        });
+
+        if(node) observer.current.observe(node);
+    },[isLoading , hasMore]);
 
     useEffect(() => {
-        // setTimeout(()=> {
-        //     setIsLoading(false);
-        // },3000);
-
         async function fetchMostPopularMovies(){
             try {
-                const response = await tmdb.get('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1');
+                setIsLoading(true);
+                setError(false);
+                const response = await tmdb.get(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${pageNumber}`);
                 const movies = response.data.results
                 // console.log(movies);
-                setMovies(movies);
-                setIsLoading(false)
+                
+                setMovies(prevMovies => [...prevMovies , ...movies]);
+
+                setHasMore(movies.length > 0);
+                setIsLoading(false);
             } catch (error) {
                 console.log(error);
+                setError(true);
             }
         }
 
         fetchMostPopularMovies();
 
 
-    } , [])
+    } , [pageNumber])
 
     console.log('movies are');
     console.log(movies);
@@ -48,41 +59,47 @@ function Main(props) {
   return (
     <div className="mt-14 max-w-sm sm:max-w-xl md:max-w-3xl lg:max-w-5xl mx-auto">
         <div>
-            <h2 className="text-white font-bold text-xl">Most Popular</h2>
+            <h2  className="text-white font-bold text-xl">Most Popular</h2>
             <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-[#ff5100]"></hr>
         </div>
       
-        {isLoading && <div className="grid sm:grid-cols-4  md:grid-cols-5 gap-8 items-center place-items-center justify-center my-8">
-            <MovieCardSkeleton cards={15}/>
+        {/* {isLoading && <div className="grid sm:grid-cols-4  md:grid-cols-5 gap-8 items-center place-items-center justify-center my-8">
+            <MovieCardSkeleton cards={20}/>
         </div> }
         {(!isLoading && movies) && <div className="grid  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-y-8 sm:gap-2 gap-8    my-8">
            
-            {movies.map(movie => {
-                return <MovieCard key={movie.id} title={movie.title} posterPath={movie.poster_path} />
+            {movies.map((movie,index) => {
+                if(movies.length === index + 1)
+                {
+                    return <MovieCard ref={lastMovieRef}  key={movie.id} title={movie.title} posterPath={movie.poster_path} />
+                }
+                else{
+                    return <MovieCard key={movie.id} title={movie.title} posterPath={movie.poster_path} />
+                }
+                
             })}
-            {/* <MovieCard imgSrc={ex} />
-        <MovieCard imgSrc={a} />
-        <MovieCard imgSrc={s} />
-        <MovieCard imgSrc={d} />
-        <MovieCard imgSrc={f} />
-        <MovieCard imgSrc={g} />
-        <MovieCard imgSrc={h} />
-        <MovieCard imgSrc={a} />
-        <MovieCard imgSrc={s} />
-        <MovieCard imgSrc={d} />
-        <MovieCard imgSrc={ex} />
-        <MovieCard imgSrc={a} />
-        <MovieCard imgSrc={s} />
-        <MovieCard imgSrc={d} />
-        <MovieCard imgSrc={f} />
-        <MovieCard imgSrc={g} />
-        <MovieCard imgSrc={h} />
-        <MovieCard imgSrc={a} />
-        <MovieCard imgSrc={s} />
-        <MovieCard imgSrc={d} /> */}
+            
+        </div>} */}
+
+        <div className="grid  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-y-8 sm:gap-2 gap-8    my-8">
+            
+          {movies.map((movie,index) => {
+                if(movies.length === index + 1)
+                {
+                    return <MovieCard ref={lastMovieRef}  key={movie.id} title={movie.title} posterPath={movie.poster_path} />
+                }
+                else{
+                    return <MovieCard key={movie.id} title={movie.title} posterPath={movie.poster_path} />
+                }
+                
+            })}  
+
+            {isLoading && <MovieCardSkeleton cards={5} />}
+         
+            
+           
+
         </div>
-        
-}
       
     </div>
   );
