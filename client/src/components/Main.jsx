@@ -66,9 +66,6 @@ function Main(props) {
 
     } , [pageNumber])
 
-    console.log('movies are');
-    console.log(movies);
-
   return (
     <div className="mt-14 max-w-sm sm:max-w-xl md:max-w-3xl lg:max-w-5xl mx-auto">
         <div>
