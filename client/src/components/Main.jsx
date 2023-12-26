@@ -4,6 +4,9 @@ import MovieCard from "./MovieCard";
 import 'react-loading-skeleton/dist/skeleton.css'
 import MovieCardSkeleton from "./MovieCardSkeleton";
 import tmdb from "../api/tmdb";
+import { useLoaderData } from "react-router-dom";
+import { useDispatch} from "react-redux";
+import {setGenres} from '../redux/genre/genreSlice.js'
 
 
 
@@ -14,6 +17,16 @@ function Main(props) {
     const [error , setError] = useState(null)
     const [hasMore , setHasMore] = useState(false)
     const [pageNumber ,setPageNumber] = useState(1);
+
+    const dispatch = useDispatch();
+
+    const genres = useLoaderData();
+    console.log(genres);
+    if(genres)
+    {
+        dispatch(setGenres(genres));
+    }
+    
 
     const observer = useRef();
     const lastMovieRef = useCallback(node => {
@@ -34,7 +47,7 @@ function Main(props) {
             try {
                 setIsLoading(true);
                 setError(false);
-                const response = await tmdb.get(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${pageNumber}`);
+                const response = await tmdb.get(`/movie/popular?language=en-US&page=${pageNumber}`);
                 const movies = response.data.results
                 // console.log(movies);
                 
@@ -86,10 +99,10 @@ function Main(props) {
           {movies.map((movie,index) => {
                 if(movies.length === index + 1)
                 {
-                    return <MovieCard ref={lastMovieRef}  key={movie.id} title={movie.title} posterPath={movie.poster_path} />
+                    return <MovieCard ref={lastMovieRef}  key={movie.id} title={movie.title} genreIds={movie.genre_ids} posterPath={movie.poster_path} />
                 }
                 else{
-                    return <MovieCard key={movie.id} title={movie.title} posterPath={movie.poster_path} />
+                    return <MovieCard key={movie.id} title={movie.title} genreIds={movie.genre_ids}  posterPath={movie.poster_path} />
                 }
                 
             })}  
