@@ -2,13 +2,16 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import {useNavigate} from 'react-router-dom'
+import { forwardRef } from "react";
 
-function MovieCard({ title , posterPath }) {
+const MovieCard = forwardRef(function MovieCard({ title , posterPath  } , ref) {
   const navigate = useNavigate();
-
+ 
   function handleNavigate(){
     navigate('/movies/id');
   }
+
+ 
 
   return (
     <div className="flex">
@@ -20,20 +23,20 @@ function MovieCard({ title , posterPath }) {
             className="transition-transform group-hover:scale-110 duration-200"
           />
           <div className="absolute inset-0 flex items-end text-xs gap-2 bg-gradient-to-t pb-2 pl-2 from-black/60 to-transparent">
-            <div className="py-2/3 px-2 rounded-lg text-white text-[10px] bg-[#ff5100]">
+            <div className="py-1/2 px-2 rounded-lg text-white text-[10px] bg-[#ff5100]">
               Action
             </div>
-            <div className="py-2/3 px-2 rounded-lg text-white text-[10px] bg-[#ff5100]">
+            <div className="py-1/2 px-2 rounded-lg text-white text-[10px] bg-[#ff5100]">
               Sci Fi
             </div>
           </div>
         </div>
         <div className="mt-2">
-          <h2 className="text-white whitespace-nowrap text-ellipsis overflow-hidden">{title}</h2>
+          <h2 ref={ref}className="text-white whitespace-nowrap text-ellipsis overflow-hidden">{title}</h2>
         </div>
       </div>
     </div>
   );
-}
+})
 
 export default MovieCard;
