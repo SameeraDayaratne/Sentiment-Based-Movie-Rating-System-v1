@@ -9,12 +9,13 @@ import TV from "./pages/TV";
 import MovieDetails from "./pages/MovieDetails";
 import SignUp , {action, action as handleSignUp} from "./pages/SignUp";
 import Login , {action as handleLogin} from "./pages/Login";
+import {loader as genreLoader} from './pages/Home'
 
 const router = createBrowserRouter([
   {path: '/' ,
    element : <Navbar />,
    children : [
-    {path: '/' , element : <Home />},
+    {path: '/' , element : <Home /> , loader: genreLoader},
     {path: '/movies' , element : <Movies />},
     {path: '/tv' , element : <TV />},
     {path: '/movies/id' , element : <MovieDetails />},

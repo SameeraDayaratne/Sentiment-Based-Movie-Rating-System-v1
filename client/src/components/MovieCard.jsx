@@ -3,14 +3,26 @@
 import React from "react";
 import {useNavigate} from 'react-router-dom'
 import { forwardRef } from "react";
+import { useSelector } from "react-redux";
 
-const MovieCard = forwardRef(function MovieCard({ title , posterPath  } , ref) {
+const MovieCard = forwardRef(function MovieCard({ title , posterPath , genreIds  } , ref) {
   const navigate = useNavigate();
  
   function handleNavigate(){
     navigate('/movies/id');
   }
 
+  const genresArr = useSelector(state => state.genre.genres);
+  let movieGenres = [];
+
+  genreIds.forEach(genreId => {
+    let genre = genresArr.find(genre => genre.id === genreId)
+    if(movieGenres.length < 2)
+    {
+      movieGenres.push(genre.name);
+    }
+    
+  });
  
 
   return (
@@ -23,12 +35,10 @@ const MovieCard = forwardRef(function MovieCard({ title , posterPath  } , ref) {
             className="transition-transform group-hover:scale-110 duration-200"
           />
           <div className="absolute inset-0 flex items-end text-xs gap-2 bg-gradient-to-t pb-2 pl-2 from-black/60 to-transparent">
-            <div className="py-1/2 px-2 rounded-lg text-white text-[10px] bg-[#ff5100]">
-              Action
-            </div>
-            <div className="py-1/2 px-2 rounded-lg text-white text-[10px] bg-[#ff5100]">
-              Sci Fi
-            </div>
+            {movieGenres.map(genre => <div key={genre} className="py-1/2 px-2 rounded-lg text-white text-[10px] bg-[#ff5100]">
+              {genre}
+            </div>)}
+        
           </div>
         </div>
         <div className="mt-2">

@@ -1,5 +1,6 @@
 import {configureStore , combineReducers } from '@reduxjs/toolkit'
 import userReducer from './user/userSlice'
+import genreReducer from './genre/genreSlice'
 import {persistReducer , persistStore , FLUSH,
     REHYDRATE,
     PAUSE,
@@ -9,7 +10,7 @@ import {persistReducer , persistStore , FLUSH,
 import storage from 'redux-persist/lib/storage';
 
 
-const rootReducer = combineReducers({user : userReducer});
+const rootReducer = combineReducers({user : userReducer , genre : genreReducer});
 
 const persistConfig = {
     key: 'root',
