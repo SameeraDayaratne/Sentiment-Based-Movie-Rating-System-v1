@@ -5,11 +5,15 @@ import {useNavigate} from 'react-router-dom'
 import { forwardRef } from "react";
 import { useSelector } from "react-redux";
 
-const MovieCard = forwardRef(function MovieCard({ title , posterPath , genreIds  } , ref) {
+
+const MovieCard = forwardRef(function MovieCard({ title , posterPath , genreIds, movieId  } , ref) {
+
+
+
   const navigate = useNavigate();
  
   function handleNavigate(){
-    navigate('/movies/id');
+    navigate(`/movies/${movieId}`);
   }
 
   const genresArr = useSelector(state => state.genre.genres);
@@ -19,7 +23,12 @@ const MovieCard = forwardRef(function MovieCard({ title , posterPath , genreIds 
     let genre = genresArr.find(genre => genre.id === genreId)
     if(movieGenres.length < 2)
     {
-      movieGenres.push(genre.name);
+      let name = genre.name;
+      if(name === 'Science Fiction')
+      {
+        name = 'Sci-Fi'
+      }
+      movieGenres.push(name);
     }
     
   });
