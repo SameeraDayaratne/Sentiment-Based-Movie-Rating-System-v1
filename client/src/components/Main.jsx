@@ -96,10 +96,10 @@ function Main(props) {
           {movies.map((movie,index) => {
                 if(movies.length === index + 1)
                 {
-                    return <MovieCard ref={lastMovieRef}  key={movie.id} title={movie.title} genreIds={movie.genre_ids} posterPath={movie.poster_path} />
+                    return <MovieCard ref={lastMovieRef}  key={movie.id} movieId={movie.id} title={movie.title} genreIds={movie.genre_ids} posterPath={movie.poster_path} />
                 }
                 else{
-                    return <MovieCard key={movie.id} title={movie.title} genreIds={movie.genre_ids}  posterPath={movie.poster_path} />
+                    return <MovieCard key={movie.id} title={movie.title} movieId={movie.id} genreIds={movie.genre_ids}  posterPath={movie.poster_path} />
                 }
                 
             })}  

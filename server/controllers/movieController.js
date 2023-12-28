@@ -1,4 +1,5 @@
 import Movie from "../models/Movie.js";
+import tmdb from "../api/tmdb.js";
 
 
 // create new movie
@@ -32,3 +33,22 @@ export const getMovies = (req,res) => {
     message : "These are the movies"
   });
 }
+
+export const getMovie = async (req,res , next) =>{
+  const id = req.params.movieId;
+
+  try {
+
+    const response = await tmdb.get(`movie/${id}?language=en-US`);
+    // console.log(response.data);
+    res.status(200).json({
+      success : true,
+      movie : response.data
+    });
+    
+  } catch (error) {
+    console.log(error.message);
+    next(error);
+  }
+  
+};
