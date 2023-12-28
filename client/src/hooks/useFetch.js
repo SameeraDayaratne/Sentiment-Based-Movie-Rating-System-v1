@@ -5,9 +5,9 @@ import movies from '../api/movies.js';
 
 function useFetch(url) {
 
-    const [data , setData] = useState([]);
-    const [isLoading , setIsLoading] = useState(false);
-    const [error , setError] = useState(null);
+    const [data , setData] = useState();
+    const [isLoading , setIsLoading] = useState(true);
+    const [error , setError] = useState();
 
     useEffect(() => {
         async function fetchData(){

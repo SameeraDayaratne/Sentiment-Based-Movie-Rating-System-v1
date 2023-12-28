@@ -36,10 +36,11 @@ export const getMovies = (req,res) => {
 
 export const getMovie = async (req,res , next) =>{
   const id = req.params.movieId;
-
+console.log('id');
+console.log(id);
   try {
 
-    const response = await tmdb.get(`movie/${id}?language=en-US`);
+    const response = await tmdb.get(`movie/${id}?language=en-US&append_to_response=credits`);
     // console.log(response.data);
     res.status(200).json({
       success : true,
