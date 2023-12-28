@@ -3,8 +3,8 @@ import React from "react";
 import MoviePoster from "./MoviePoster";
 import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
-import s from "../assets/2.jpg";
 import CastSlider from "./CastSlider";
+import ReviewSection from "./ReviewSection";
 
 function MovieInfo(props) {
 
@@ -67,6 +67,7 @@ function MovieInfo(props) {
 
       
   <CastSlider cast={movie.credits.cast} />
+  <ReviewSection />
   
  
 </div>

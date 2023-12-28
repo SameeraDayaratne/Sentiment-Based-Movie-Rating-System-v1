@@ -21,7 +21,7 @@ function CastSlider({cast}) {
   return (
     <>
     <h2 className="px-2 mt-10 font-bold text-xl text-center text-white">Cast</h2>
-    <div className="mt-2 mb-10 flex items-center">
+    <div className="mt-2 mb-5 flex items-center">
          
          <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={slideLeft} size={40} />
          <div id="slider" className="overflow-x-scroll whitespace-nowrap w-full h-full scroll-smooth scrollbar-hide">
