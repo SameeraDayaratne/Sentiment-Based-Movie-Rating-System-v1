@@ -65,6 +65,7 @@ function MovieInfo(props) {
     
   </div>
 
+      
   <CastSlider cast={movie.credits.cast} />
   
  
