@@ -3,7 +3,7 @@ import React from 'react';
 function ReviewComment({children}) {
     return (
         <div>
-            <p>{children}</p>
+            <p className='line-clamp-3'>{children}</p>
         </div>
     );
 }
