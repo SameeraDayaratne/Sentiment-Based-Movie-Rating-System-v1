@@ -16,10 +16,11 @@ body {
 @layer base {
   
   html {
-      @apply scroll-smooth;
+      @apply scroll-smooth scrollbar-thin scrollbar-thumb-orange-700 scrollbar-track-slate-700;
     }
   
   .body{
       font: 'Poppins';
+      
   }
 }
