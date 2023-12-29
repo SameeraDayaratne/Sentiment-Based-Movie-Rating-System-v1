@@ -8,7 +8,13 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    
+    extend: {
+      colors: {
+        'themeOrange':'#ff5100',
+      }
+    },
+    
   },
   plugins: [hideScroll , scrollbar],
 }
