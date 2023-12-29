@@ -30,7 +30,7 @@ function Review({name,comment}) {
 
     return (
         <>
-        <div className='w-full h-40 bg-zinc-900 rounded-md flex gap-5 p-5 '>
+        <div className='w-full h-40 bg-zinc-900 rounded-md flex gap-5 p-5 hover:-translate-y-1 ease-in-out duration-300'>
             <div className=' flex flex-col justify-center items-center'>
                 <div className='flex rounded-full h-16 w-16 bg-orange-700 text-center '> <h2 className='place-self-center mx-auto text-3xl font-medium'>{nameFirstLetter}</h2></div>
             </div>
