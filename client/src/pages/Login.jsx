@@ -7,6 +7,7 @@ import { Form, useActionData , useNavigation , redirect , useNavigate} from "rea
 import auth from "../api/auth.js";
 import {useDispatch} from 'react-redux'
 import {signInSuccess ,signInFaliure} from '../redux/user/userSlice.js'
+import OAuth from "../components/OAuth";
 // import {Facebook,GitHub,Google} from '@mui/material/Icon';
 
 function Login(props) {
@@ -95,7 +96,7 @@ function Login(props) {
                   className="bg-white rounded-lg shadow-hard-gray"
                   method="post"
                 >
-                  <div className="p-8 text-sm space-y-6">
+                  <div className="p-8 text-sm space-y-2">
                     {data && !data.success && data.errors && (
                       <ul>
                         {Object.values(data.error).map((err) => (
@@ -121,9 +122,10 @@ function Login(props) {
                         />
                       );
                     })}
-                    <button className="bg-[#ff5100] hover:bg-[#c63600]  font-semibold text-white py-4 px-3 rounded-lg text-center w-full uppercase border-b-[6px] border-primary-green-600">
+                    <button className="bg-[#ff5100] hover:bg-[#c63600]  font-semibold text-white py-4 px-3 rounded-lg text-center w-full uppercase">
                       {isLogginIn ?'Logging In' :'Login'}
                     </button>
+                    <OAuth />
                     <p className="text-center text-neutral-grayish-blue-500 text-[12px]">
                       By clicking the button, you are agreeing to our
                       <a
