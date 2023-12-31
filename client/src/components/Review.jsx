@@ -4,8 +4,9 @@ import React from 'react';
 import { GiExpand } from "react-icons/gi";
 import { useState , useEffect , useRef } from 'react';
 import ReviewModal from './ReviewModal';
+import Ratings from './Ratings';
 
-function Review({name,comment}) {
+function Review({name,comment ,rating}) {
 
     const [showExpandIcon , setShowExpandIcon] = useState(false);
     const [showReviewModal , setShowReviewModal] = useState(false);
@@ -28,6 +29,10 @@ function Review({name,comment}) {
         setShowReviewModal(true);
     }
 
+    let newRating = rating/2;
+    let result = Math.floor(newRating * 2) / 2;
+    
+
     return (
         <>
         <div className='w-full h-40 bg-zinc-900 rounded-md flex gap-5 p-5 hover:-translate-y-1 ease-in-out duration-300'>
@@ -38,7 +43,8 @@ function Review({name,comment}) {
                 <div className='flex flex-row justify-between'>
                     <div className='flex flex-row justify-start gap-3'>
                         <h1>{name}</h1>
-                        <h2>ratinfg</h2>
+                        <Ratings rating={result} />
+                        
                     </div>
                     {showExpandIcon &&  <div>
                         <GiExpand onClick={openReviewModal}  className='opacity-50 hover:opacity-100 hover:scale-110 ease-in-out duration-300 overflow-visible cursor-pointer' />
@@ -51,7 +57,7 @@ function Review({name,comment}) {
         </div>
             </div>
         </div>
-        {showReviewModal && <ReviewModal nameFirstLetter={nameFirstLetter} name={name} comment={comment} closeReviewModal={closeReviewModal}></ReviewModal>}
+        {showReviewModal && <ReviewModal nameFirstLetter={nameFirstLetter} name={name} comment={comment} rating={result} closeReviewModal={closeReviewModal}></ReviewModal>}
         </>
         
     );
