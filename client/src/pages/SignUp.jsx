@@ -5,6 +5,7 @@ import { validateForm } from "../utils/formValidate.js";
 import MoviePoster from "../components/MoviePoster";
 import { Form, json, useActionData, useNavigation , redirect } from "react-router-dom";
 import auth from "../api/auth.js";
+import OAuth from "../components/OAuth";
 import axios from "axios";
 
 
@@ -106,7 +107,7 @@ function SignUp(props) {
                   method="post"
                   className="bg-white rounded-lg shadow-hard-gray"
                 >
-                  <div className="p-8 text-sm space-y-6">
+                  <div className="p-8 text-sm space-y-2">
                     {data && data.errors && (
                       <ul>
                         {Object.values(data.error).map((err) => (
@@ -134,10 +135,11 @@ function SignUp(props) {
                     })}
                     <button
                       disabled={isSigningUp}
-                      className="bg-[#ff5100] hover:bg-[#c63600]  font-semibold text-white py-4 px-3 rounded-lg text-center w-full uppercase border-b-[6px] border-primary-green-600"
+                      className="bg-[#ff5100] hover:bg-[#c63600]  font-semibold text-white py-4 px-3 rounded-lg text-center w-full uppercase "
                     >
                       {isSigningUp ? "Signing Up" : "Sign Up"}
                     </button>
+                    <OAuth />
                     <p className="text-center text-neutral-grayish-blue-500 text-[12px]">
                       By clicking the button, you are agreeing to our
                       <a

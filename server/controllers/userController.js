@@ -21,9 +21,6 @@ export const registerUser = async (req, res , next) => {
 
         const hashedPassword = await bcrypt.hash(result.password, 10);
 
-        console.log('fname');
-        console.log(result.firstName);
-
         const user = {
             firstName: result.firstName,
             lastName: result.lastName,
@@ -107,7 +104,7 @@ export const loginUser = async (req, res , next) => {
                     
                 }).json({
                     success : true,
-                    message: 'Successfully Logged ins',
+                    message: 'Successfully Logged in',
                     accessToken : accessToken,
                     user : rest
                     
@@ -196,4 +193,83 @@ export const loginUser = async (req, res , next) => {
         next(error)
     }
 
+  }
+
+  export const google = async (req , res , next) => {
+
+    const email = req.body.email;
+ 
+    try {
+    const user = await User.findOne({email : email});
+
+    if(user)
+    {
+        const { password:password , ...rest}= user._doc;
+        try {
+            const accessToken = signAccessToken(user.id);
+            const refreshToken = await signRefreshToken(user.id);
+
+            res.status(200).cookie('jwt' , refreshToken , {
+                httpOnly : true,
+                sameSite: 'none',
+                secure : true,          
+            }).json({
+                success : true,
+                message : 'Successfully Logged In',
+                accessToken : accessToken,
+                user : rest
+            })
+
+        } catch (error) {
+            next(error);
+        }
+        
+    }
+    else{
+        let name = req.body.name;
+        const firstName = name.split(" ")[0];
+        const secondName = name.split(" ")[1];
+
+        const randomPassword = Math.random().toString(36).slice(-8);
+
+        try {
+        const hashedPassword = await bcrypt.hash(randomPassword , 10);
+
+        const user = {
+            firstName,
+            lastName : secondName,
+            email : req.body.email,
+            password : hashedPassword,
+        }
+
+        const newUser = new User(user);
+        const savedUser = await newUser.save();
+        
+        const { password:password , ...rest}= savedUser._doc;
+
+        const accessToken = signAccessToken(savedUser.id);
+        const refreshToken = await signRefreshToken(savedUser.id);
+
+            res.status(200).cookie('jwt' , refreshToken , {
+                httpOnly : true,
+                sameSite: 'none',
+                secure : true,          
+            }).json({
+                success : true,
+                message : 'User Created and Successfully Logged In',
+                accessToken : accessToken,
+                user : rest
+            })
+
+        } catch (error) {
+            console.log('error occured' , error.message);
+            next(error);
+        }
+        
+    }
+    } catch (error) {
+        console.log('error occured' , error.message);
+        next(error)
+    }
+    
   }
