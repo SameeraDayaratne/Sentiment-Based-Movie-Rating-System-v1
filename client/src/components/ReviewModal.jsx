@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from "react";
+import Ratings from "./Ratings";
 
 import { MdClose } from "react-icons/md";
 
-function ReviewModal({closeReviewModal , comment , name , nameFirstLetter}) {
+function ReviewModal({closeReviewModal , comment , name , nameFirstLetter ,rating}) {
   
   return (
     <div className="fixed inset-0 p-5 lg:p-0 bg-black bg-opacity-30 backdrop-blur-sm mx-auto z-20 flex justify-center items-center">
@@ -21,7 +22,7 @@ function ReviewModal({closeReviewModal , comment , name , nameFirstLetter}) {
           <div className="flex flex-row justify-between">
             <div className="flex flex-row justify-start gap-3">
               <h1>{name}</h1>
-              <h2>ratinfg</h2>
+              <Ratings rating={rating} />
             </div>
             <MdClose onClick={closeReviewModal} size={18} className="opacity-50 hover:opacity-100 cursor-pointer" />
           </div>
