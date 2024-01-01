@@ -53,3 +53,21 @@ console.log(id);
   }
   
 };
+
+export const getReviews = async(req,res,next) => {
+
+  const page = req.query.page;
+  const id = req.params.movieId;
+
+  try {
+    const response = await tmdb.get(`movie/${id}/reviews?language=en-US&page=${page}`);
+    res.status(200).json({
+      success : true,
+      reviews : response.data
+    })
+  } catch (error) {
+    next(error)
+  }
+
+
+}

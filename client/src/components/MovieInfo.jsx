@@ -67,7 +67,7 @@ function MovieInfo(props) {
 
       
   <CastSlider cast={movie.credits.cast} />
-  <ReviewSection />
+  <ReviewSection movieId={params.movieId}/>
   
  
 </div>
