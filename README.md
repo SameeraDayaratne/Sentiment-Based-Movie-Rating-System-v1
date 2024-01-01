@@ -12,17 +12,18 @@ You will also need to obtain an API key from Firebase and set it as an environme
 
 For development, you can set these environment variables by creating a `.env` file in the root of the server directory.
 
-# Server Configuration
+### Server Configuration
 SERVER_PORT=4000
 
-# Authentication Server Configuration
+### Authentication Server Configuration
 AUTH_SERVER_PORT=5000
 
-# Token Secrets
+### Token Secrets
 ACCESS_TOKEN_SECRET=your_access_token_secret
+
 REFRESH_TOKEN_SECRET=your_refresh_token_secret
 
-# MongoDB Configuration
+### MongoDB Configuration
 MONGO_URI=your_mongo_uri
 
 Clone this repository and navigate to the project folder. Then, follow these steps:
