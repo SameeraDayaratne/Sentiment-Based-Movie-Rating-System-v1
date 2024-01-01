@@ -1,84 +1,43 @@
-import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { fetchDataFromApi } from "./utils/api";
+/* eslint-disable no-unused-vars */
 
-import { useSelector, useDispatch } from "react-redux";
-import { getApiConfiguration, getGenres } from "./store/homeSlice";
+import { SkeletonTheme } from "react-loading-skeleton";
+import { createBrowserRouter , RouterProvider } from 'react-router-dom'
+import Home from "./pages/Home";
+import Movies from "./pages/Movies";
+import Navbar from "./components/Navbar";
+import TV from "./pages/TV";
+import SignUp , {action, action as handleSignUp} from "./pages/SignUp";
+import Login , {action as handleLogin} from "./pages/Login";
+import {loader as genreLoader} from './pages/Home'
+import MovieInfo from "./components/MovieInfo";
 
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
-import Home from "./pages/home/Home";
-import Details from "./pages/details/Details";
-import SearchResult from "./pages/searchResult/SearchResult";
-import Explore from "./pages/explore/Explore";
-import PageNotFound from "./pages/404/PageNotFound";
+const router = createBrowserRouter([
+  {path: '/' ,
+   element : <Navbar />,
+   children : [
+    {path: '/' , element : <Home /> , loader: genreLoader},
+    {path: '/movies' , element : <Movies />},
+    {path: '/tv' , element : <TV />},
+    {path: '/movies/:movieId' , element : <MovieInfo />},
+    {path: '/signup' , element : <SignUp />,action : handleSignUp },
+    {path: '/login' , element : <Login />, action:handleLogin},
+   ]
+  }
+ 
+])
+
 
 function App() {
-    const dispatch = useDispatch();
-    const { url } = useSelector((state) => state.home);
-    console.log(url);
+  
 
-    useEffect(() => {
-        fetchApiConfig();
-        genresCall();
+  return (
+    <SkeletonTheme baseColor="#202020" highlightColor="#444">
+      <RouterProvider router={router}>
 
-        async function getData(){
-            const response = await fetch('http://localhost:5000/api');
-            const data = await response.json();
-
-            console.log(data);
-        }
-
-        getData();
-
-
-    }, []);
-
-    const fetchApiConfig = () => {
-        fetchDataFromApi("/configuration").then((res) => {
-            console.log(res);
-
-            const url = {
-                backdrop: res.images.secure_base_url + "original",
-                poster: res.images.secure_base_url + "original",
-                profile: res.images.secure_base_url + "original",
-            };
-
-            dispatch(getApiConfiguration(url));
-        });
-    };
-
-    const genresCall = async () => {
-        let promises = [];
-        let endPoints = ["tv", "movie"];
-        let allGenres = {};
-
-        endPoints.forEach((url) => {
-            promises.push(fetchDataFromApi(`/genre/${url}/list`));
-        });
-
-        const data = await Promise.all(promises);
-        console.log(data);
-        data.map(({ genres }) => {
-            return genres.map((item) => (allGenres[item.id] = item));
-        });
-
-        dispatch(getGenres(allGenres));
-    };
-
-    return (
-        <BrowserRouter>
-            <Header />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/:mediaType/:id" element={<Details />} />
-                <Route path="/search/:query" element={<SearchResult />} />
-                <Route path="/explore/:mediaType" element={<Explore />} />
-                <Route path="*" element={<PageNotFound />} />
-            </Routes>
-            <Footer />
-        </BrowserRouter>
-    );
+      </RouterProvider>
+    
+  </SkeletonTheme>
+  )
 }
 
-export default App;
+export default App
