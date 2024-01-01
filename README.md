@@ -4,15 +4,35 @@ This project is an innovative movie rating platform that uses MERN stack (MongoD
 
 ## Installation and Usage
 
-To run this project, you will need to have Node.js, MongoDB, and Python installed on your machine. You will also need to obtain an API key from [The Movie Database (TMDB)](https://www.themoviedb.org/documentation/api) and set it as an environment variable.
+To run this project, you will need to have Node.js, MongoDB, and Python installed on your machine. You will also need to obtain an API key from [The Movie Database (TMDB)](https://www.themoviedb.org/documentation/api) and set it as an environment variable as TMDB_ACCESS_TOKEN in the server directory and VITE_TMDB_ACCESS_TOKEN in the client directory.
+
+You will also need to obtain an API key from Firebase and set it as an environment variable as VITE_FIREBASE_API_KEY in the client directory.
+
+### Setting Environment Variables
+
+For development, you can set these environment variables by creating a `.env` file in the root of the server directory.
+
+# Server Configuration
+SERVER_PORT=4000
+
+# Authentication Server Configuration
+AUTH_SERVER_PORT=5000
+
+# Token Secrets
+ACCESS_TOKEN_SECRET=your_access_token_secret
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+
+# MongoDB Configuration
+MONGO_URI=your_mongo_uri
 
 Clone this repository and navigate to the project folder. Then, follow these steps:
 
 1. Install the dependencies for the backend and the frontend using `npm install`.
-2. Start the backend server using `npm run dev`.
-3. Start the backend auth server using `npm run devAuth`.
-4. Start the frontend server using `npm run dev`.
-5. Open your browser and go to `http://localhost:5173` to see the application.
+2. Set up the Environment varriables
+3. Start the backend server using `npm run dev`.
+4. Start the backend auth server using `npm run devAuth`.
+5. Start the frontend server using `npm run dev`.
+6. Open your browser and go to `http://localhost:5173` to see the application.
 
 You can sign up using your email and password, or use your Google account to sign in. Once you are logged in, you can browse the movies, read the reviews, and rate them using the sentiment analysis feature. You can also write your own reviews and see how they affect the movie ratings.
 
