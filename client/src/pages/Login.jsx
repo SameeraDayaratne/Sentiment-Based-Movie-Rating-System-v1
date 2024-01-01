@@ -8,6 +8,7 @@ import auth from "../api/auth.js";
 import {useDispatch} from 'react-redux'
 import {signInSuccess ,signInFaliure} from '../redux/user/userSlice.js'
 import OAuth from "../components/OAuth";
+import MainPageBackdrop from "../components/MainPageBackdrop";
 // import {Facebook,GitHub,Google} from '@mui/material/Icon';
 
 function Login(props) {
@@ -25,7 +26,7 @@ function Login(props) {
     {
       id: "password",
       name: "password",
-      type: "text",
+      type: "password",
       placeholder: "Password",
       validate: ["isNotEmpty"],
       isValidated: false,
@@ -74,19 +75,17 @@ function Login(props) {
 
   return (
     <div className="App">
-      <MoviePoster />
+      <MainPageBackdrop backdrop_path='/xJHokMbljvjADYdit5fK5VQsXEG.jpg' />
       <div className="pt-20 absolute top-0 left-0 right-0 mx-auto  lg:min-h-screen font-poppins bg-primary-red-500 bg-intro-mobile lg:bg-intro-desktop overflow-hidden bg-desktop-intro lg:flex py-12">
         <div className="max-w-[1240px] mx-auto container flex flex-grow">
           <div className="mx-3 flex flex-wrap h-full">
             <div className="px-3 py-20 lg:py-0 w-full lg:w-1/2 h-full flex flex-col justify-center items-center">
               <div className="text-white space-y-8 my-auto xl:w-10/12">
                 <h1 className="text-4xl lg:text-5xl text-center lg:text-left font-bold">
-                  Learn to code by watching others
+                  Welcome back, movie lover.
                 </h1>
                 <p>
-                  See how experienced developers solve problems in real-time.
-                  Watching scripted tutorials is great, but understanding how
-                  developers think is invaluable.
+                Log in to explore your personalized movie recommendations and ratings. Discover a world of cinematic wonders curated just for you.
                 </p>
               </div>
             </div>
@@ -116,6 +115,7 @@ function Login(props) {
                           key={`form-${_index}`}
                           id={_form.id}
                           name={_form.name}
+                          type={_form.type}
                           placeholder={_form.placeholder}
                           isValidated={_form.isValidated}
                           error={_form.error}
