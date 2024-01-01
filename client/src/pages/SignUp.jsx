@@ -7,6 +7,7 @@ import { Form, json, useActionData, useNavigation , redirect } from "react-route
 import auth from "../api/auth.js";
 import OAuth from "../components/OAuth";
 import axios from "axios";
+import MainPageBackdrop from "../components/MainPageBackdrop";
 
 
 // import {Facebook,GitHub,Google} from '@mui/material/Icon';
@@ -85,19 +86,17 @@ function SignUp(props) {
 
   return (
     <div className="App">
-      <MoviePoster />
+      <MainPageBackdrop backdrop_path='/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg' />
       <div className="pt-20 absolute top-0 left-0 right-0 mx-auto lg:min-h-screen font-poppins bg-primary-red-500 bg-intro-mobile lg:bg-intro-desktop overflow-hidden bg-desktop-intro lg:flex py-12">
         <div className="max-w-[1240px] mx-auto container flex flex-grow">
           <div className="mx-3 flex flex-wrap h-full">
             <div className="px-3 py-20 lg:py-0 w-full lg:w-1/2 h-full flex flex-col justify-center items-center">
               <div className="text-white space-y-8 my-auto xl:w-10/12">
                 <h1 className="text-4xl lg:text-5xl text-center lg:text-left font-bold">
-                  Learn to code by watching others
+                  Rate Movies Based on Your Emotions
                 </h1>
                 <p>
-                  See how experienced developers solve problems in real-time.
-                  Watching scripted tutorials is great, but understanding how
-                  developers think is invaluable.
+                Our system uses natural language processing to analyze your reviews and ratings. You can also browse movies by genre, popularity, or sentiment score. 
                 </p>
               </div>
             </div>
