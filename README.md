@@ -18,9 +18,9 @@ You can sign up using your email and password, or use your Google account to sig
 
 ## Demo
 
-Here is a screenshot of the current state of the application.
+Here is a recording of the current state of the application.
 
-
+https://github.com/SameeraDayaratne/Sentiment-Based-Movie-Rating-System-v1/assets/85645373/d99700c0-7252-482d-b230-41460416e1be
 
 ## Documentation
 
