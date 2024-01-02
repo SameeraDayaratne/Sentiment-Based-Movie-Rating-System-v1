@@ -99,7 +99,7 @@ function ReviewSection({movieId}) {
   return (
     <>
       <h2 className="px-2 font-bold mb-5 text-xl text-center text-white">Reviews</h2>
-      <div className=" mb-10 grid md:grid-cols-2  gap-2">
+      <div className=" mb-10 grid lg:grid-cols-2  gap-2">
 
         {reviewsArray.length > 0 && reviewsArray.slice(firstItem,lastItemIndex).map(review => {
           return <Review key={review.id} name={review.author} comment={review.content} rating={review.author_details.rating} />

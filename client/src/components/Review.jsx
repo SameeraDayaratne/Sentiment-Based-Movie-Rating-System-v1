@@ -11,7 +11,7 @@ function Review({name,comment ,rating}) {
     const [showExpandIcon , setShowExpandIcon] = useState(false);
     const [showReviewModal , setShowReviewModal] = useState(false);
     const paragraph = useRef();
-    let nameFirstLetter = name.slice(0,1);
+    let nameFirstLetter = name.slice(0,1).toUpperCase();
 
     useEffect(() => {
         
@@ -40,7 +40,7 @@ function Review({name,comment ,rating}) {
                 <div className='flex rounded-full h-16 w-16 bg-orange-700 text-center '> <h2 className='place-self-center mx-auto text-3xl font-medium'>{nameFirstLetter}</h2></div>
             </div>
             <div className='flex flex-col w-full  gap-3'>
-                <div className='flex flex-row justify-between'>
+                <div className='flex flex-row items-center justify-between'>
                     <div className='flex flex-row justify-start gap-3'>
                         <h1>{name}</h1>
                         <Ratings rating={result} />
@@ -53,8 +53,8 @@ function Review({name,comment ,rating}) {
                 </div>
                 
                 <div>
-                <p ref={paragraph} className='line-clamp-3'>{comment}</p>
-        </div>
+                    <p ref={paragraph} className='line-clamp-3'>{comment}</p>
+                </div>
             </div>
         </div>
         {showReviewModal && <ReviewModal nameFirstLetter={nameFirstLetter} name={name} comment={comment} rating={result} closeReviewModal={closeReviewModal}></ReviewModal>}
