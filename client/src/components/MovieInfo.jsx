@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import CastSlider from "./CastSlider";
 import ReviewSection from "./ReviewSection";
+import ReviewForm from "./ReviewForm";
 
 function MovieInfo(props) {
 
@@ -68,6 +69,7 @@ function MovieInfo(props) {
       
   <CastSlider cast={movie.credits.cast} />
   <ReviewSection movieId={params.movieId}/>
+  <ReviewForm />     
   
  
 </div>

@@ -105,8 +105,6 @@ function ReviewSection({movieId}) {
           return <Review key={review.id} name={review.author} comment={review.content} rating={review.author_details.rating} />
         })}
         
-        
-        
       </div>
       <div className="flex justify-center mb-10">
           <ul className="flex items-center  -space-x-px h-8">
@@ -116,7 +114,7 @@ function ReviewSection({movieId}) {
             })}
             <li onClick={increasePageNumber} className="flex items-center border-themeOrange border cursor-pointer px-1 h-8 rounded-r-md "><MdChevronRight size={20} /></li>
           </ul>
-        </div>
+      </div>
     </>
   );
 }

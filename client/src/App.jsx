@@ -10,6 +10,8 @@ import SignUp , {action, action as handleSignUp} from "./pages/SignUp";
 import Login , {action as handleLogin} from "./pages/Login";
 import {loader as genreLoader} from './pages/Home'
 import MovieInfo from "./components/MovieInfo";
+import {action as handleReviewSubmission} from './components/ReviewForm'
+import ReviewForm from "./components/ReviewForm";
 
 const router = createBrowserRouter([
   {path: '/' ,
@@ -18,7 +20,7 @@ const router = createBrowserRouter([
     {path: '/' , element : <Home /> , loader: genreLoader},
     {path: '/movies' , element : <Movies />},
     {path: '/tv' , element : <TV />},
-    {path: '/movies/:movieId' , element : <MovieInfo />},
+    {path: '/movies/:movieId' , element : <MovieInfo /> , action : handleReviewSubmission},
     {path: '/signup' , element : <SignUp />,action : handleSignUp },
     {path: '/login' , element : <Login />, action:handleLogin},
    ]
