@@ -65,11 +65,60 @@ export const getReviews = async(req,res,next) => {
 
   try {
     const response = await tmdb.get(`movie/${id}/reviews?language=en-US&page=${page}`);
+
+    if(page < 2)
+    {
+      const reviewsFromDb = await Review.find({movieId : id}).sort( { 'createdAt': -1 } );
+
+    const formattedReviewsFromDb = reviewsFromDb.map(review => {
+      return {
+        id: review._id,
+        author : 'Sample Name',
+        author_details : { rating : review.rating},
+        content : review.review
+
+      }
+    });
+
+    // console.log('formatted lenght' , formattedReviewsFromDb.length);
+
+    let allReviews = [...formattedReviewsFromDb ,...response.data.results];
+    let responseObj = {
+      id : response.data.id,
+      page : response.data.page,
+      results : allReviews,
+      total_pages : response.data.total_pages,
+      total_results : response.data.total_results + formattedReviewsFromDb.length
+    }
+
+    // console.log('allrevs' , allReviews);
+
+    // console.log('db revs' , reviewsFromDb);
     res.status(200).json({
       success : true,
-      reviews : response.data
+      reviews : responseObj
     })
+    }
+    else{
+
+      const reviewsFromDb = await Review.find({movieId : id});
+      let responseObj = {
+        id : response.data.id,
+        page : response.data.page,
+        results : response.data.results,
+        total_pages : response.data.total_pages,
+        total_results : response.data.total_results + reviewsFromDb.length
+      }
+      res.status(200).json({
+        success : true,
+        reviews : responseObj
+      })
+    }
+    // console.log('tmdb res' , response.data.results);
+
+    
   } catch (error) {
+    console.log('err' , error);
     next(error)
   }
 

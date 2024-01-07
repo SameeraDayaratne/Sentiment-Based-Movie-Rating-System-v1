@@ -6,7 +6,7 @@ const reviewSchema = new mongoose.Schema({
     movieId : {
         type : String,
         required : true,
-        unique : true
+        
     },
     review : {
         type : String,
@@ -17,6 +17,8 @@ const reviewSchema = new mongoose.Schema({
         type: Number,
         required : true
     }
-});
+},
+{ timestamps: true }
+);
 
 export default mongoose.model("Review" , reviewSchema);
