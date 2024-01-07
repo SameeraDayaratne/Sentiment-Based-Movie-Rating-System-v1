@@ -1,5 +1,6 @@
 import React from "react";
 import {Form} from 'react-router-dom'
+import movies from "../api/movies";
 
 function ReviewForm(props) {
   return (
@@ -36,8 +37,20 @@ export async function action({request, params}){
 
     const formData = await request.formData();
     const review = formData.get("review");
+    const body = {
+      movieId: params.movieId,
+      review
+    }
 
-    console.log(review);
+    try {
+      const response = await movies.post('/createReview',body);
+      console.log(response.data);
+      return null;
 
-    return null;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+
+   
 }
