@@ -10,8 +10,8 @@ import SignUp , {action, action as handleSignUp} from "./pages/SignUp";
 import Login , {action as handleLogin} from "./pages/Login";
 import {loader as genreLoader} from './pages/Home'
 import MovieInfo from "./components/MovieInfo";
-import {action as handleReviewSubmission} from './components/ReviewForm'
 import ReviewForm from "./components/ReviewForm";
+import {action as handleReviewSubmission} from './components/ReviewSection'
 
 const router = createBrowserRouter([
   {path: '/' ,

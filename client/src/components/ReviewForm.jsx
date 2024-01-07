@@ -2,14 +2,15 @@ import React from "react";
 import {Form} from 'react-router-dom'
 import movies from "../api/movies";
 
-function ReviewForm(props) {
+function ReviewForm({movieId}) {
+
   return (
     <div className="w-full p-5 bg-zinc-900  rounded-md">
       <div className="">
         <h2 className="font-bold  text-xl text-center text-white">
           Add a Review
         </h2>
-    <Form method="post">
+    <Form method="post" action={`/movies/${movieId}`}>
     <div className="p-2 w-full">
           <div>
             <textarea
@@ -33,24 +34,4 @@ function ReviewForm(props) {
 
 export default ReviewForm;
 
-export async function action({request, params}){
 
-    const formData = await request.formData();
-    const review = formData.get("review");
-    const body = {
-      movieId: params.movieId,
-      review
-    }
-
-    try {
-      const response = await movies.post('/createReview',body);
-      console.log(response.data);
-      return null;
-
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-
-   
-}

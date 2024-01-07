@@ -13,8 +13,7 @@ function MovieInfo(props) {
 
   const {isLoading , error , data : movie} = useFetch(`/getMovie/${params.movieId}`);
 
-  console.log(movie);
-
+  // console.log(movie);
   return (
     
     <div className="text-white relative ">
@@ -69,7 +68,7 @@ function MovieInfo(props) {
       
   <CastSlider cast={movie.credits.cast} />
   <ReviewSection movieId={params.movieId}/>
-  <ReviewForm />     
+  <ReviewForm movieId={params.movieId}/>     
   
  
 </div>
